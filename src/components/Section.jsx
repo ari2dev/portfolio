@@ -4,7 +4,7 @@ const ease = [0.16, 1, 0.3, 1]
 
 export default function Section({ id, title, index, note, children }) {
   return (
-    <section id={id} className="max-w-[1280px] mx-auto px-6 py-28">
+    <section id={id} className="max-w-[1280px] mx-auto px-6 py-20 sm:py-28">
       <div className="relative border-t border-ink/10 pt-8 mb-14">
         {index && (
           <span aria-hidden="true"

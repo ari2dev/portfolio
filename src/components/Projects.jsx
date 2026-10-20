@@ -41,7 +41,7 @@ export default function Projects() {
             <motion.article key={p.title} data-cursor
               initial={reduce ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.7, delay: i * 0.12, ease }}
-              whileHover={reduce ? undefined : { y: -8 }}
+              whileHover={reduce ? undefined : { y: -8 }} whileTap={{ scale: 0.98 }}
               className="group glass p-6 flex flex-col transition-colors duration-300 hover:border-accent/60 hover:shadow-[0_0_32px_rgb(var(--accent)/0.14)]">
               <Wireframe />
               <div className="flex items-center gap-3 mb-2">

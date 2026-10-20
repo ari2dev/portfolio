@@ -101,7 +101,7 @@ export default function Hero() {
             </div>
 
             <motion.p {...fadeUp(0.7)}
-              className="mt-[2vh] h-5 sm:h-6 text-[10px] sm:text-xs font-mono uppercase tracking-[0.28em] text-mute">
+              className="mt-[2vh] h-5 sm:h-6 text-[9px] sm:text-xs font-mono uppercase tracking-[0.16em] sm:tracking-[0.28em] text-mute px-4 text-center">
               <span className="text-accent2">&gt;&nbsp;</span>
               {reduce ? profile.roles[0] : typed}
               {!reduce && <span aria-hidden="true" className="ml-1 inline-block h-[0.95em] w-[6px] translate-y-[1px] bg-accent animate-pulse" />}
@@ -121,7 +121,8 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      <div className="relative z-20 min-h-[100svh] flex items-end justify-center px-6 pb-8 pointer-events-none">
+      <div className="relative z-20 min-h-[100svh] flex items-end justify-center px-6 pb-8 pointer-events-none"
+        style={{ paddingBottom: 'calc(2rem + env(safe-area-inset-bottom))' }}>
         <motion.div {...fadeUp(1.2)}
           className="pointer-events-auto flex items-center gap-2 bg-paper/60 backdrop-blur-xl border border-ink/10 rounded-full pl-2 pr-2 py-2">
           <Magnetic strength={0.25}>

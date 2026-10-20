@@ -41,18 +41,21 @@ export default function CodeWindow() {
         </button>
       </div>
 
-      <pre className="p-5 text-sm leading-7 font-mono overflow-x-auto">
-        {javaDemo.map((line, i) => (
-          <motion.div key={i}
-            initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ delay: i * 0.15, duration: 0.5, ease }}
-            className="flex whitespace-pre">
-            <span aria-hidden="true" className="select-none w-7 shrink-0 text-right mr-4 text-ink/25 tabular-nums">{i + 1}</span>
-            <span>{line.map(([text, token], j) => <span key={j} className={TOKEN[token]}>{text}</span>)}</span>
-          </motion.div>
-        ))}
-      </pre>
+      <div className="relative">
+        <pre className="p-4 sm:p-5 text-[11px] sm:text-sm leading-6 sm:leading-7 font-mono overflow-x-auto">
+          {javaDemo.map((line, i) => (
+            <motion.div key={i}
+              initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ delay: i * 0.15, duration: 0.5, ease }}
+              className="flex whitespace-pre">
+              <span aria-hidden="true" className="select-none w-6 sm:w-7 shrink-0 text-right mr-3 sm:mr-4 text-ink/25 tabular-nums">{i + 1}</span>
+              <span>{line.map(([text, token], j) => <span key={j} className={TOKEN[token]}>{text}</span>)}</span>
+            </motion.div>
+          ))}
+        </pre>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-ink/[0.08] to-transparent" />
+      </div>
     </div>
   )
 }

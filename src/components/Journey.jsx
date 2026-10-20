@@ -24,7 +24,7 @@ export default function Journey() {
                 <span className="absolute left-0 top-2 grid place-items-center w-10 h-10 rounded-full bg-paper border border-ink/10 text-mute group-hover:text-accent group-hover:border-accent/50 transition-colors">
                   {Icon && <Icon size={18} />}
                 </span>
-                <motion.div whileHover={{ x: 6 }} transition={{ type: 'spring', stiffness: 300, damping: 24 }}
+                <motion.div whileHover={{ x: 6 }} whileTap={{ scale: 0.99 }} transition={{ type: 'spring', stiffness: 300, damping: 24 }}
                   className="glass p-5 group-hover:border-accent/40 transition-colors">
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <h3 className="font-semibold leading-snug">{j.title}</h3>

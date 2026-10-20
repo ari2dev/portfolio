@@ -7,8 +7,8 @@ export const profile = {
   about: 'Developer, analyst, and a teacher at heart — the person behind the code. I enjoy turning complex problems into clear, logical steps. At IES Lomo de la Herradura I write Java for management systems and design relational databases with SQL. Beyond the degree, I build full-stack web applications with Laravel, PHP, and React. Backed by three years of experience as a private tutor, I excel at communicating technical concepts clearly and delivering projects on strict schedules.',
   email: 'ariadnagalnav2@gmail.com',
   phone: '667 022 698',
-  github: '',    // e.g. 'https://github.com/username' — pega aquí tu URL real
-  linkedin: '',  // e.g. 'https://linkedin.com/in/username' — pega aquí tu URL real
+  github: 'https://github.com/ari2dev',    // e.g. 'https://github.com/username' — pega aquí tu URL real
+  linkedin: 'https://www.linkedin.com/in/ariadna-galvan-navarro-807848335/',  // e.g. 'https://linkedin.com/in/username' — pega aquí tu URL real
   cv: '/cv-ariadna.pdf',
   headline: ['Software', 'Developer'],
   focus: 'Multiplatform development',

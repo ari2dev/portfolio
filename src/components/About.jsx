@@ -78,6 +78,7 @@ function TiltCard({ children, className }) {
 
 export default function About() {
   const reduce = useReducedMotion()
+  const touch = useIsTouch()
 
   return (
     <Section id="about" title="About me" index="01"
@@ -91,33 +92,36 @@ export default function About() {
           <CodeWindow />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {skills.map((s, i) => {
             const Icon = ICONS[s.icon]
             const fill = LEVEL[s.level]
             return (
               <motion.div key={s.name} data-cursor
-                initial={reduce ? false : { opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }} transition={{ delay: i * 0.06 }}
-                whileHover={{ y: -6 }}
-                className="group glass relative overflow-hidden p-5 text-center transition-all duration-300 hover:border-accent/60 hover:shadow-[0_0_28px_rgb(var(--accent)/0.15)]">
+                initial={reduce ? false : { opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.05 }}
+                whileHover={{ y: -3 }} whileTap={{ scale: 0.98 }}
+                className="group glass relative overflow-hidden p-4 flex items-center gap-3.5 transition-colors duration-300 hover:border-accent/60">
                 <span aria-hidden="true"
                   className="pointer-events-none absolute inset-x-6 -top-10 h-20 rounded-full bg-accent/25 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <motion.div animate={reduce ? undefined : { y: [0, -8, 0] }}
+                <motion.span
+                  animate={touch || reduce ? undefined : { y: [0, -4, 0] }}
                   transition={{ duration: 3, repeat: Infinity, delay: i * 0.4, ease: 'easeInOut' }}
-                  className="relative flex justify-center mb-3">
-                  <Icon className="text-accent" size={30} />
-                </motion.div>
-                <span className="relative block text-sm font-medium leading-snug">{s.name}</span>
-                <span className="relative block mt-1 text-[11px] uppercase tracking-[0.14em] text-mute">{s.level}</span>
-                {fill !== undefined && (
-                  <div className="relative mt-3 h-[3px] w-16 mx-auto rounded-full bg-ink/10 overflow-hidden">
-                    <motion.div
-                      initial={reduce ? false : { scaleX: 0 }} whileInView={{ scaleX: fill }}
-                      viewport={{ once: true }} transition={{ duration: 1, delay: 0.25 + i * 0.06, ease }}
-                      className="h-full origin-left rounded-full bg-gradient-to-r from-accent to-accent2" />
-                  </div>
-                )}
+                  className="relative shrink-0 grid place-items-center w-11 h-11 rounded-lg bg-ink/[0.05] border border-ink/10 group-hover:border-accent/40 transition-colors">
+                  <Icon className="text-accent" size={20} />
+                </motion.span>
+                <div className="relative min-w-0 flex-1">
+                  <span className="block text-sm font-medium leading-tight">{s.name}</span>
+                  <span className="block mt-0.5 text-[10px] uppercase tracking-[0.14em] text-mute">{s.level}</span>
+                  {fill !== undefined && (
+                    <div className="mt-2 h-[3px] w-full rounded-full bg-ink/10 overflow-hidden">
+                      <motion.div
+                        initial={reduce ? false : { scaleX: 0 }} whileInView={{ scaleX: fill }}
+                        viewport={{ once: true }} transition={{ duration: 1, delay: 0.25 + i * 0.05, ease }}
+                        className="h-full origin-left rounded-full bg-gradient-to-r from-accent to-accent2" />
+                    </div>
+                  )}
+                </div>
               </motion.div>
             )
           })}
@@ -141,7 +145,8 @@ export default function About() {
           {principles.map((p, i) => (
             <motion.div key={p.title}
               initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.7, delay: i * 0.12, ease }}>
+              viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.7, delay: i * 0.12, ease }}
+              whileTap={{ scale: 0.98 }}>
               <TiltCard className="glass h-full p-6 transition-colors duration-300 hover:border-accent/50">
                 <span className="text-accent font-mono text-sm tabular-nums">0{i + 1}</span>
                 <h4 className="mt-3 text-lg font-semibold">{p.title}</h4>
