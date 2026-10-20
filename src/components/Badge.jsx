@@ -8,7 +8,7 @@ export default function Badge({ text }) {
   const label = `${text} / ${text} / `
 
   return (
-    <a href="#about" aria-label="Scroll to About" className="relative block w-28 h-28 text-bone/80 hover:text-bone transition-colors">
+    <a href="#about" aria-label="Scroll to About" className="relative block w-28 h-28 text-mute hover:text-ink transition-colors">
       <motion.svg viewBox="0 0 120 120" style={{ rotate }} className="absolute inset-0" aria-hidden="true">
         <defs><path id="badge-circle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
         {/* textLength = circumference, so the text fills the circle with even spacing */}

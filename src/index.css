@@ -5,13 +5,13 @@
 /* Tokens de color. Formato "R G B" para poder usar opacidad: bg-ink/10 */
 :root, [data-theme='dark'] {
   color-scheme: dark;
-  --paper: 12 10 17; --ink: 246 242 248; --mute: 163 155 175;
+  --paper: 0 0 0; --ink: 246 242 248; --mute: 163 155 175;
   --accent: 255 77 109; --accent2: 255 176 77; --rim: 255 205 215;
   --blob: 0.22; --grain: 0.07;
 }
 [data-theme='light'] {
   color-scheme: light;
-  --paper: 245 242 247; --ink: 24 18 30; --mute: 104 96 115;
+  --paper: 255 255 255; --ink: 24 18 30; --mute: 104 96 115;
   --accent: 225 29 99; --accent2: 255 138 31; --rim: 225 29 99;
   --blob: 0.3; --grain: 0.05;
 }
@@ -31,5 +31,15 @@ body::after {
 @layer components {
   .glass { @apply bg-ink/[0.04] backdrop-blur-xl border border-ink/10 rounded-xl; }
   .display { font-weight: 900; font-stretch: 118%; letter-spacing: -0.04em; line-height: 0.88; text-transform: uppercase; }
+}
+
+/* Shimmer de los wireframes de Projects (con reduced-motion global se para solo) */
+@keyframes shimmer { to { background-position: -200% 0 } }
+@layer utilities {
+  .shimmer {
+    background: linear-gradient(100deg, rgb(var(--ink) / 0.06) 40%, rgb(var(--ink) / 0.14) 50%, rgb(var(--ink) / 0.06) 60%);
+    background-size: 200% 100%;
+    animation: shimmer 2.4s linear infinite;
+  }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

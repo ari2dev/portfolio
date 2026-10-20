@@ -1,65 +1,154 @@
-import { motion } from 'framer-motion'
-import { Coffee, Database, Code2, Monitor, Users, Languages } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { animate, motion, useInView, useReducedMotion } from 'framer-motion'
+import { Coffee, Database, Layers, Atom, Server, Code2, Monitor, Users } from 'lucide-react'
 import Section from './Section'
-import { profile, skills } from '../data/content'
+import CodeWindow from './CodeWindow'
+import useIsTouch from '../hooks/useIsTouch'
+import { profile, skills, stats, principles } from '../data/content'
 
-const ICONS = { Coffee, Database, Code2, Monitor, Users, Languages }
+const ICONS = { Coffee, Database, Layers, Atom, Server, Code2, Monitor, Users }
 
-// Resaltador de sintaxis casero: cada línea es una lista de [texto, clase de color].
-const kw = 'text-accent', ty = 'text-ink', st = 'text-accent2', pl = 'text-mute'
-const code = [
-  [['public class ', kw], ['Ariadna ', ty], ['{', pl]],
-  [['  String ', ty], ['role = ', pl], ['"Software developer in training"', st], [';', pl]],
-  [['  String ', ty], ['degree = ', pl], ['"Higher Diploma in DAM"', st], [';', pl]],
-  [['  String[] ', ty], ['stack = {', pl], ['"Java"', st], [', ', pl], ['"SQL"', st], [', ', pl], ['"HTML5"', st], [', ', pl], ['"CSS3"', st], ['};', pl]],
-  [['  boolean ', ty], ['learnsFast = ', pl], ['true', kw], [';', pl]],
-  [['}', pl]],
-]
+const ease = [0.16, 1, 0.3, 1]
+
+const LEVEL = { 'Advanced / Core': 1, 'Advanced': 0.88, 'Solid': 0.78, 'Intermediate': 0.66 }
+
+function Words({ text }) {
+  const reduce = useReducedMotion()
+  const touch = useIsTouch()
+  if (reduce) return <>{text}</>
+  return text.split(' ').map((w, i) => (
+    <motion.span key={i} className="inline-block whitespace-pre"
+      initial={touch ? { opacity: 0 } : { opacity: 0, y: 8, filter: 'blur(6px)' }}
+      whileInView={touch ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.015, ease }}>
+      {w + ' '}
+    </motion.span>
+  ))
+}
+
+function Counter({ to, suffix }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const reduce = useReducedMotion()
+  const [n, setN] = useState(0)
+
+  useEffect(() => {
+    if (!inView) return
+    const controls = animate(0, to, {
+      duration: reduce ? 0 : 1.4,
+      ease,
+      onUpdate: (v) => setN(Math.round(v)),
+    })
+    return () => controls.stop()
+  }, [inView, to, reduce])
+
+  return <span ref={ref} className="tabular-nums">{n}{suffix}</span>
+}
+
+function TiltCard({ children, className }) {
+  const touch = useIsTouch()
+  const reduce = useReducedMotion()
+  const ref = useRef(null)
+  const px = useRef(0)
+  const py = useRef(0)
+
+  const onMove = (e) => {
+    if (touch || reduce) return
+    const r = ref.current.getBoundingClientRect()
+    px.current = (e.clientX - r.left) / r.width - 0.5
+    py.current = (e.clientY - r.top) / r.height - 0.5
+    ref.current.style.setProperty('--rx', `${-py.current * 8}deg`)
+    ref.current.style.setProperty('--ry', `${px.current * 8}deg`)
+  }
+  const onLeave = () => {
+    ref.current.style.setProperty('--rx', '0deg')
+    ref.current.style.setProperty('--ry', '0deg')
+  }
+
+  return (
+    <div style={{ perspective: 900 }}>
+      <div ref={ref} onPointerMove={onMove} onPointerLeave={onLeave}
+        className={`${className} transition-transform duration-200 ease-out will-change-transform`}
+        style={{ transform: 'rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))', transformStyle: 'preserve-3d' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
 
 export default function About() {
+  const reduce = useReducedMotion()
+
   return (
-    <Section id="about" title="About me">
+    <Section id="about" title="About me" index="01"
+      note="Logic-first thinking, from database schemas to the interfaces on top of them.">
       <div className="grid lg:grid-cols-2 gap-10 items-start">
         <div>
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}
-            className="text-lg text-ink/80 leading-relaxed max-w-prose">
-            {profile.about}
-          </motion.p>
+          <p className="text-lg text-ink/80 leading-relaxed max-w-prose">
+            <Words text={profile.about} />
+          </p>
 
-          {/* Las líneas del código aparecen una a una (stagger) al entrar en pantalla */}
-          <motion.div initial="hidden" whileInView="show" viewport={{ once: true, margin: '-80px' }}
-            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.18 } } }}
-            className="glass mt-8 overflow-hidden" data-cursor>
-            <div className="flex gap-2 px-4 py-3 border-b border-ink/10">
-              <span className="w-3 h-3 rounded-full bg-ink/20" /><span className="w-3 h-3 rounded-full bg-ink/20" /><span className="w-3 h-3 rounded-full bg-ink/20" />
-              <span className="ml-3 text-xs text-mute">Ariadna.java</span>
-            </div>
-            <pre className="p-5 text-sm leading-7 font-mono overflow-x-auto">
-              {code.map((line, i) => (
-                <motion.div key={i} variants={{ hidden: { opacity: 0, x: -12 }, show: { opacity: 1, x: 0 } }} className="whitespace-pre">
-                  {line.map(([text, color], j) => <span key={j} className={color}>{text}</span>)}
-                </motion.div>
-              ))}
-            </pre>
-          </motion.div>
+          <CodeWindow />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-4">
           {skills.map((s, i) => {
             const Icon = ICONS[s.icon]
+            const fill = LEVEL[s.level]
             return (
               <motion.div key={s.name} data-cursor
-                initial={{ opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }} whileHover={{ y: -6 }}
-                className="glass p-5 text-center hover:border-accent/60 transition-colors">
-                {/* Icono flotante con retraso distinto por tarjeta para que no vayan sincronizados */}
-                <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 3, repeat: Infinity, delay: i * 0.4, ease: 'easeInOut' }} className="flex justify-center mb-3">
+                initial={reduce ? false : { opacity: 0, scale: 0.8 }} whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }} transition={{ delay: i * 0.06 }}
+                whileHover={{ y: -6 }}
+                className="group glass relative overflow-hidden p-5 text-center transition-all duration-300 hover:border-accent/60 hover:shadow-[0_0_28px_rgb(var(--accent)/0.15)]">
+                <span aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-6 -top-10 h-20 rounded-full bg-accent/25 blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <motion.div animate={reduce ? undefined : { y: [0, -8, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: i * 0.4, ease: 'easeInOut' }}
+                  className="relative flex justify-center mb-3">
                   <Icon className="text-accent" size={30} />
                 </motion.div>
-                <span className="text-sm">{s.name}</span>
+                <span className="relative block text-sm font-medium leading-snug">{s.name}</span>
+                <span className="relative block mt-1 text-[11px] uppercase tracking-[0.14em] text-mute">{s.level}</span>
+                {fill !== undefined && (
+                  <div className="relative mt-3 h-[3px] w-16 mx-auto rounded-full bg-ink/10 overflow-hidden">
+                    <motion.div
+                      initial={reduce ? false : { scaleX: 0 }} whileInView={{ scaleX: fill }}
+                      viewport={{ once: true }} transition={{ duration: 1, delay: 0.25 + i * 0.06, ease }}
+                      className="h-full origin-left rounded-full bg-gradient-to-r from-accent to-accent2" />
+                  </div>
+                )}
               </motion.div>
             )
           })}
+        </div>
+      </div>
+
+      <div className="mt-16 border-y border-ink/10 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        {stats.map((s) => (
+          <div key={s.label}>
+            <div className="display text-4xl sm:text-5xl text-ink">
+              <Counter to={s.value} suffix={s.suffix} />
+            </div>
+            <div className="mt-2 text-xs uppercase tracking-[0.2em] text-mute">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-16">
+        <h3 className="text-sm uppercase tracking-[0.3em] text-mute mb-6">How I work</h3>
+        <div className="grid md:grid-cols-3 gap-6">
+          {principles.map((p, i) => (
+            <motion.div key={p.title}
+              initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.7, delay: i * 0.12, ease }}>
+              <TiltCard className="glass h-full p-6 transition-colors duration-300 hover:border-accent/50">
+                <span className="text-accent font-mono text-sm tabular-nums">0{i + 1}</span>
+                <h4 className="mt-3 text-lg font-semibold">{p.title}</h4>
+                <p className="mt-2 text-sm text-ink/75 leading-relaxed">{p.text}</p>
+              </TiltCard>
+            </motion.div>
+          ))}
         </div>
       </div>
     </Section>

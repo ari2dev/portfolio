@@ -2,25 +2,20 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
 import useTheme from '../hooks/useTheme'
+import useActiveSection from '../hooks/useActiveSection'
 import { profile } from '../data/content'
-
-const links = [['About', 'about'], ['Projects', 'projects'], ['Journey', 'journey'], ['Contact', 'contact']]
+import { links, sectionIds } from '../data/sections'
 
 export default function Navbar() {
-  const [active, setActive] = useState('')
   const [scrolled, setScrolled] = useState(false)
   const [theme, toggleTheme] = useTheme()
+  const active = useActiveSection(sectionIds)
 
   useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
-      { rootMargin: '-45% 0px -50% 0px' }
-    )
-    links.forEach(([, id]) => { const el = document.getElementById(id); if (el) io.observe(el) })
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => { io.disconnect(); window.removeEventListener('scroll', onScroll) }
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (

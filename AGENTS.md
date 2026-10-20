@@ -25,9 +25,9 @@ Portfolio personal de una desarrolladora junior (estudia DAM). Debe verse como o
 - Cargar Three.js con lazy.
 
 ## Estructura
-src/components: Navbar, Hero, FlexWord, Magnetic, Badge, About, Section, Cursor, Backdrop, WaveField
-src/hooks: useIsTouch, useTheme, useTypewriter
-src/data/content.js
+src/components: Navbar, Hero, FlexWord, Magnetic, Badge, About, Section, Cursor, Backdrop, Weave, ProgressRail
+src/hooks: useIsTouch, useTheme, useTypewriter, useDecode, useActiveSection
+src/data: content.js (contenido personal), sections.js (navegación)
 
 ## Reglas de trabajo
 - Antes de cambiar nada, lee los archivos afectados.
