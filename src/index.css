@@ -22,11 +22,12 @@ body { @apply bg-paper text-ink font-sans antialiased; transition: background-co
 :focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 3px; }
 @media (pointer: fine) { body, a, button, input, textarea { cursor: none; } }
 
-/* Grano de película por encima de todo menos del cursor */
+/* Grano de película por encima de todo menos del cursor (más suave en táctil) */
 body::after {
   content: ''; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: var(--grain);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+@media (pointer: coarse) { body::after { opacity: calc(var(--grain) * 0.35); } }
 
 @layer components {
   .glass { @apply bg-ink/[0.04] backdrop-blur-xl border border-ink/10 rounded-xl; }

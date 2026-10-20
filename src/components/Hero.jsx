@@ -70,7 +70,7 @@ export default function Hero() {
       <motion.div style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }} className="absolute inset-0">
 
         <motion.div style={{ x: textX, z: -120, scale: 1.1 }}
-          className="absolute inset-x-0 top-[15%] md:top-[17%] select-none opacity-90">
+          className="absolute inset-x-0 top-[12%] sm:top-[17%] select-none opacity-90">
           <div className="mx-auto w-fit flex flex-col items-center">
             <motion.h1 {...fadeUp(0.15)}
               className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.35em] text-mute mb-[1vh]">
@@ -115,7 +115,7 @@ export default function Hero() {
           <img
             src={cutout}
             alt={`Portrait of ${profile.name}`}
-            className="h-[48vh] sm:h-[68vh] max-h-[760px] w-auto object-contain"
+            className="h-[38vh] sm:h-[68vh] max-h-[760px] w-auto object-contain"
             style={{ filter: 'drop-shadow(0 0 2px rgb(var(--accent) / 0.4)) drop-shadow(0 24px 40px rgb(0 0 0 / 0.35))' }}
           />
         </motion.div>

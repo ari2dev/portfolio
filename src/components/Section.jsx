@@ -8,7 +8,7 @@ export default function Section({ id, title, index, note, children }) {
       <div className="relative border-t border-ink/10 pt-8 mb-14">
         {index && (
           <span aria-hidden="true"
-            className="absolute right-0 -top-4 display text-[5.5rem] leading-none text-accent/[0.07] tabular-nums select-none pointer-events-none">
+            className="absolute right-0 -top-4 display text-[3.25rem] sm:text-[5.5rem] leading-none text-accent/[0.07] tabular-nums select-none pointer-events-none">
             {index}
           </span>
         )}

@@ -85,7 +85,7 @@ export default function About() {
       note="Logic-first thinking, from database schemas to the interfaces on top of them.">
       <div className="grid lg:grid-cols-2 gap-10 items-start">
         <div>
-          <p className="text-lg text-ink/80 leading-relaxed max-w-prose">
+          <p className="text-base sm:text-lg text-ink/80 leading-relaxed max-w-prose">
             <Words text={profile.about} />
           </p>
 
@@ -134,7 +134,7 @@ export default function About() {
             <div className="display text-4xl sm:text-5xl text-ink">
               <Counter to={s.value} suffix={s.suffix} />
             </div>
-            <div className="mt-2 text-xs uppercase tracking-[0.2em] text-mute">{s.label}</div>
+            <div className="mt-2 text-[10px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.2em] text-mute">{s.label}</div>
           </div>
         ))}
       </div>
