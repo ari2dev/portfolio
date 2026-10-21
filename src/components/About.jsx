@@ -1,12 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import { animate, motion, useInView, useReducedMotion } from 'framer-motion'
-import { Coffee, Database, Layers, Atom, Server, Code2, Monitor, Users } from 'lucide-react'
+import { Database, Monitor, Users } from 'lucide-react'
 import Section from './Section'
 import CodeWindow from './CodeWindow'
+import TiltCard from './TiltCard'
+import TechIcon from './TechIcon'
+import { techKey } from '../data/tech'
 import useIsTouch from '../hooks/useIsTouch'
 import { profile, skills, stats, principles } from '../data/content'
 
-const ICONS = { Coffee, Database, Layers, Atom, Server, Code2, Monitor, Users }
+const ICONS = { Database, Monitor, Users }
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -45,37 +48,6 @@ function Counter({ to, suffix }) {
   return <span ref={ref} className="tabular-nums">{n}{suffix}</span>
 }
 
-function TiltCard({ children, className }) {
-  const touch = useIsTouch()
-  const reduce = useReducedMotion()
-  const ref = useRef(null)
-  const px = useRef(0)
-  const py = useRef(0)
-
-  const onMove = (e) => {
-    if (touch || reduce) return
-    const r = ref.current.getBoundingClientRect()
-    px.current = (e.clientX - r.left) / r.width - 0.5
-    py.current = (e.clientY - r.top) / r.height - 0.5
-    ref.current.style.setProperty('--rx', `${-py.current * 8}deg`)
-    ref.current.style.setProperty('--ry', `${px.current * 8}deg`)
-  }
-  const onLeave = () => {
-    ref.current.style.setProperty('--rx', '0deg')
-    ref.current.style.setProperty('--ry', '0deg')
-  }
-
-  return (
-    <div style={{ perspective: 900 }}>
-      <div ref={ref} onPointerMove={onMove} onPointerLeave={onLeave}
-        className={`${className} transition-transform duration-200 ease-out will-change-transform`}
-        style={{ transform: 'rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg))', transformStyle: 'preserve-3d' }}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
 export default function About() {
   const reduce = useReducedMotion()
   const touch = useIsTouch()
@@ -95,6 +67,7 @@ export default function About() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {skills.map((s, i) => {
             const Icon = ICONS[s.icon]
+            const brand = techKey(s.name)
             const fill = LEVEL[s.level]
             return (
               <motion.div key={s.name} data-cursor
@@ -107,8 +80,10 @@ export default function About() {
                 <motion.span
                   animate={touch || reduce ? undefined : { y: [0, -4, 0] }}
                   transition={{ duration: 3, repeat: Infinity, delay: i * 0.4, ease: 'easeInOut' }}
-                  className="relative shrink-0 grid place-items-center w-11 h-11 rounded-lg bg-ink/[0.05] border border-ink/10 group-hover:border-accent/40 transition-colors">
-                  <Icon className="text-accent" size={20} />
+                  className="relative shrink-0 grid place-items-center w-11 h-11 rounded-lg bg-ink/[0.05] border border-ink/10 group-hover:border-accent/40 transition-colors text-accent">
+                  {brand
+                    ? <TechIcon name={brand} size={20} />
+                    : Icon && <Icon size={20} />}
                 </motion.span>
                 <div className="relative min-w-0 flex-1">
                   <span className="block text-sm font-medium leading-tight">{s.name}</span>

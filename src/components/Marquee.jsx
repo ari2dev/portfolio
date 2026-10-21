@@ -1,21 +1,20 @@
 import { useMemo, useRef } from 'react'
 import { motion, useAnimationFrame, useMotionValue, useScroll, useSpring, useTransform, useVelocity } from 'framer-motion'
+import TechIcon from './TechIcon'
+import { techKey } from '../data/tech'
 
-// Wraps a value into the range [min, max)
 const wrap = (min, max, v) => { const r = max - min; return ((((v - min) % r) + r) % r) + min }
 
-export default function Marquee({ items, base = -3 }) {
+export default function Marquee({ items, base = -1.4 }) {
   const still = useMemo(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
   const speed = still ? 0 : base
   const baseX = useMotionValue(0)
   const dir = useRef(1)
 
-  // Scroll velocity (px/s) → smoothed → speed multiplier. Scrolling up gives a negative value = reverse.
   const { scrollY } = useScroll()
   const smooth = useSpring(useVelocity(scrollY), { damping: 50, stiffness: 400 })
-  const boost = useTransform(smooth, [0, 1000], [0, 5], { clamp: false })
+  const boost = useTransform(smooth, [0, 1000], [0, 4], { clamp: false })
 
-  // The track holds two identical halves, so looping from 0% to -50% is seamless.
   const x = useTransform(baseX, (v) => `${wrap(-50, 0, v)}%`)
 
   useAnimationFrame((_, delta) => {
@@ -27,21 +26,24 @@ export default function Marquee({ items, base = -3 }) {
     baseX.set(baseX.get() + move)
   })
 
-  const half = [...items, ...items] // repeated so each half is wider than any screen
+  const half = [...items, ...items]
 
   return (
     <div aria-hidden="true" className="relative z-10 overflow-hidden py-10 -my-6">
-      {/* Slightly tilted band: breaks the strict horizontal grid on purpose */}
       <div className="-rotate-[1.5deg] bg-accent text-paper border-y border-ink/10 py-4">
         <motion.div style={{ x }} className="flex w-max whitespace-nowrap">
           {[0, 1].map((k) => (
             <div key={k} className="flex shrink-0 items-center">
-              {half.map((t, i) => (
-                <span key={i} className="flex items-center">
-                  <span className="display text-4xl sm:text-6xl px-6">{t}</span>
-                  <span className="text-paper/60 text-2xl">✦</span>
-                </span>
-              ))}
+              {half.map((t, i) => {
+                const key = techKey(t)
+                return (
+                  <span key={i} className="flex items-center">
+                    {key && <TechIcon name={key} size={26} className="mr-3 opacity-90" />}
+                    <span className="display text-4xl sm:text-6xl px-6">{t}</span>
+                    <span className="text-paper/60 text-2xl">✦</span>
+                  </span>
+                )
+              })}
             </div>
           ))}
         </motion.div>

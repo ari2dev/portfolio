@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Phone, Copy, Check, Clock, Car, MapPin, Link } from 'lucide-react'
+import { Mail, Copy, Check, Clock, Car, MapPin, Link } from 'lucide-react'
 import Section from './Section'
 import Magnetic from './Magnetic'
 import { profile } from '../data/content'
@@ -65,11 +65,6 @@ export default function Contact() {
             {copied ? <Check size={16} className="text-accent" /> : <Copy size={16} />}
             {copied ? 'Copied' : 'Copy email'}
           </button>
-
-          <a href={`tel:${profile.phone.replace(/\s/g, '')}`}
-            className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-ink/[0.03] px-5 py-4 text-sm font-medium text-mute hover:text-ink hover:border-ink/30 transition-colors">
-            <Phone size={16} className="text-accent2" /> {profile.phone}
-          </a>
         </motion.div>
 
         {SOCIALS.length > 0 && (

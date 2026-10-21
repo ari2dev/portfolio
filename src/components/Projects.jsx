@@ -1,11 +1,12 @@
 import { motion, useReducedMotion } from 'framer-motion'
-import { Coffee, Layers, Atom, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import Section from './Section'
+import TiltCard from './TiltCard'
+import TechIcon from './TechIcon'
+import { techKey } from '../data/tech'
 import { projects } from '../data/content'
 
 const ease = [0.16, 1, 0.3, 1]
-
-const ICONS = { Coffee, Layers, Atom }
 
 function Wireframe() {
   return (
@@ -36,30 +37,37 @@ export default function Projects() {
       note="Selected work — from backend logic and data models to the interfaces on top of them.">
       <div className="grid md:grid-cols-3 gap-6 mt-2">
         {projects.map((p, i) => {
-          const Icon = ICONS[p.icon]
+          const brand = techKey(p.title)
           return (
             <motion.article key={p.title} data-cursor
               initial={reduce ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }} transition={{ duration: 0.7, delay: i * 0.12, ease }}
-              whileHover={reduce ? undefined : { y: -8 }} whileTap={{ scale: 0.98 }}
-              className="group glass p-6 flex flex-col transition-colors duration-300 hover:border-accent/60 hover:shadow-[0_0_32px_rgb(var(--accent)/0.14)]">
-              <Wireframe />
-              <div className="flex items-center gap-3 mb-2">
-                {Icon && <Icon size={20} className="text-accent shrink-0" />}
-                <h3 className="font-semibold leading-snug">{p.title}</h3>
-              </div>
-              <p className="text-sm text-ink/75 leading-relaxed">{p.desc}</p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {p.tech.map((t) => (
-                  <span key={t} className="text-xs font-mono px-2.5 py-1 rounded-full border border-ink/10 text-mute">{t}</span>
-                ))}
-              </div>
-              <div className="mt-auto pt-5">
-                <div className="border-t border-ink/10 pt-4">
-                  <span className="text-[11px] uppercase tracking-[0.2em] text-accent font-semibold">Highlight</span>
-                  <p className="mt-1 font-serif italic text-mute leading-snug">{p.status}</p>
+              whileHover={reduce ? undefined : { y: -8 }} whileTap={{ scale: 0.98 }}>
+              <TiltCard className="glass h-full p-6 flex flex-col transition-colors duration-300 hover:border-accent/60 hover:shadow-[0_0_32px_rgb(var(--accent)/0.14)]">
+                <Wireframe />
+                <div className="flex items-center gap-3 mb-2">
+                  {brand && <TechIcon name={brand} size={20} className="text-accent shrink-0" />}
+                  <h3 className="font-semibold leading-snug">{p.title}</h3>
                 </div>
-              </div>
+                <p className="text-sm text-ink/75 leading-relaxed">{p.desc}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {p.tech.map((t) => {
+                    const pk = techKey(t)
+                    return (
+                      <span key={t} className="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-full border border-ink/10 text-mute">
+                        {pk && <TechIcon name={pk} size={12} className="text-accent" />}
+                        {t}
+                      </span>
+                    )
+                  })}
+                </div>
+                <div className="mt-auto pt-5">
+                  <div className="border-t border-ink/10 pt-4">
+                    <span className="text-[11px] uppercase tracking-[0.2em] text-accent font-semibold">Highlight</span>
+                    <p className="mt-1 font-serif italic text-mute leading-snug">{p.status}</p>
+                  </div>
+                </div>
+              </TiltCard>
             </motion.article>
           )
         })}
